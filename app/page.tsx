@@ -1,5 +1,7 @@
 import React from 'react';
 import { Upload, MessageCircle, Zap, Shield, Star, ArrowRight, FileText, Brain, Clock, Users, Check } from 'lucide-react';
+import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
+import Link from 'next/link';
 
 const TalkToPDFLanding = () => {
 
@@ -18,9 +20,18 @@ const TalkToPDFLanding = () => {
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Features</a>
             <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Pricing</a>
             <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">About</a>
-            <button className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-              Get Started
-            </button>
+            <SignedOut>
+              <SignInButton>
+                <button className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                  Get Started
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href={"/chat"} className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                Chat Now
+              </Link>
+            </SignedIn>
           </div>
         </nav>
       </header>
@@ -34,15 +45,15 @@ const TalkToPDFLanding = () => {
               AI-Powered PDF Analysis
             </span>
           </div>
-          
+
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Have conversations with
             <br />
             <span className="text-blue-600">your PDF documents</span>
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Upload any PDF and start asking questions. Get instant answers, summaries, and insights 
+            Upload any PDF and start asking questions. Get instant answers, summaries, and insights
             powered by advanced AI technology.
           </p>
 
@@ -148,14 +159,13 @@ const TalkToPDFLanding = () => {
                 key={index}
                 className={`group p-8 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer`}
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
-                  feature.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                  feature.color === 'purple' ? 'bg-purple-100 text-purple-600' :
-                  feature.color === 'green' ? 'bg-green-100 text-green-600' :
-                  feature.color === 'orange' ? 'bg-orange-100 text-orange-600' :
-                  feature.color === 'pink' ? 'bg-pink-100 text-pink-600' :
-                  'bg-indigo-100 text-indigo-600'
-                }`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${feature.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                    feature.color === 'purple' ? 'bg-purple-100 text-purple-600' :
+                      feature.color === 'green' ? 'bg-green-100 text-green-600' :
+                        feature.color === 'orange' ? 'bg-orange-100 text-orange-600' :
+                          feature.color === 'pink' ? 'bg-pink-100 text-pink-600' :
+                            'bg-indigo-100 text-indigo-600'
+                  }`}>
                   <feature.icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
@@ -218,7 +228,7 @@ const TalkToPDFLanding = () => {
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Join thousands of users who are transforming how they interact with documents
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
               <button className="bg-blue-600 text-white px-8 py-4 rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-sm">
                 Start Free Trial
