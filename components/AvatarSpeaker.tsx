@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { Bot, Volume2, VolumeX } from "lucide-react";
+import { Bot, Volume2, VolumeX, FileText } from "lucide-react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -236,30 +236,88 @@ export function AvatarSpeaker({ text }: AvatarSpeakerProps) {
   if (!text) return null;
 
   return (
-    <div className="flex items-start space-x-4 p-6 bg-white rounded-2xl shadow-sm border">
+    <div className="flex items-start gap-4 p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+      {/* AI Avatar */}
       <div className="relative flex-shrink-0">
-        <Bot className={`w-12 h-12 text-blue-600 ${(isPlaying || isLoading) ? "animate-pulse" : ""}`} />
+        <div className={`w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center transition-all duration-300 ${
+          (isPlaying || isLoading) ? "bg-blue-200 scale-105" : ""
+        }`}>
+          <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
+            <FileText className="w-4 h-4 text-white" />
+          </div>
+        </div>
+        
+        {/* Status indicators */}
         {isPlaying && (
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse">
+            <div className="absolute inset-0 bg-green-500 rounded-full animate-ping"></div>
+          </div>
         )}
         {isLoading && (
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full animate-spin"></div>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full">
+            <div className="absolute inset-0 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
         )}
       </div>
+
+      {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="prose prose-sm max-w-none text-gray-800">
-          <Markdown remarkPlugins={[remarkGfm]}>{text}</Markdown>
+        {/* AI Response */}
+        <div className="mb-4">
+          <div className="prose prose-sm max-w-none text-gray-800 leading-relaxed">
+            <Markdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+                h1: ({ children }) => <h1 className="text-lg font-semibold text-gray-900 mb-2">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-base font-semibold text-gray-900 mb-2">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-sm font-semibold text-gray-900 mb-2">{children}</h3>,
+                ul: ({ children }) => <ul className="mb-3 pl-4 space-y-1">{children}</ul>,
+                ol: ({ children }) => <ol className="mb-3 pl-4 space-y-1">{children}</ol>,
+                li: ({ children }) => <li className="text-gray-700">{children}</li>,
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 border-blue-200 pl-4 py-2 bg-blue-50 rounded-r-lg mb-3">
+                    {children}
+                  </blockquote>
+                ),
+                code: ({ children, className }) => {
+                  const isInline = !className;
+                  if (isInline) {
+                    return (
+                      <code className="bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-mono">
+                        {children}
+                      </code>
+                    );
+                  }
+                  return (
+                    <pre className="bg-gray-100 p-3 rounded-lg overflow-x-auto mb-3">
+                      <code className="text-sm font-mono text-gray-800">{children}</code>
+                    </pre>
+                  );
+                },
+                strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
+              }}
+            >
+              {text}
+            </Markdown>
+          </div>
         </div>
-        <div className="flex items-center gap-3 mt-4">
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
           <button
             onClick={toggleSpeech}
-            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+            className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+              isPlaying || isLoading
+                ? 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
+                : 'bg-gray-50 text-gray-700 hover:bg-blue-50 hover:text-blue-700 border border-gray-200 hover:border-blue-200'
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
             disabled={!speechEnabled}
           >
             {isPlaying || isLoading ? (
               <>
                 <VolumeX className="w-4 h-4" />
-                <span>{isLoading ? 'Loading...' : 'Stop'}</span>
+                <span>{isLoading ? 'Generating...' : 'Stop'}</span>
               </>
             ) : (
               <>
@@ -268,13 +326,19 @@ export function AvatarSpeaker({ text }: AvatarSpeakerProps) {
               </>
             )}
           </button>
+
           <button
             onClick={() => setSpeechEnabled(!speechEnabled)}
-            className={`text-xs px-2 py-1 rounded transition-colors ${
-              speechEnabled ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
+            className={`inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+              speechEnabled 
+                ? "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100" 
+                : "bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100"
             }`}
           >
-            {speechEnabled ? "Speech On" : "Speech Off"}
+            <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+              speechEnabled ? 'bg-green-500' : 'bg-gray-400'
+            }`} />
+            {speechEnabled ? "Speech enabled" : "Speech disabled"}
           </button>
         </div>
       </div>
