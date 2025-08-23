@@ -37,7 +37,7 @@ Follow these instructions to get a local copy of the project up and running.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/talk-to-pdf.git
+    git clone https://github.com/HarpalSingh7395/talk-to-pdf.git
     cd talk-to-pdf
     ```
 
@@ -64,6 +64,11 @@ Follow these instructions to get a local copy of the project up and running.
 
     # ElevenLabs API Key
     ELEVENLABS_API_KEY=
+
+    #ChromaDB 
+    CHROMA_API_KEY=
+    CHROMA_TENANT=
+    CHROMA_DATABASE=
     ```
 
 4.  **Run the development server:**
