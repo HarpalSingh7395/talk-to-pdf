@@ -3,8 +3,8 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 export async function chunkText(text: string) {
   // Optimize chunk size for embedding APIs (most work well with 200-400 tokens)
   const splitter = new RecursiveCharacterTextSplitter({ 
-    chunkSize: 300, // Reduced from 500 for faster embedding
-    chunkOverlap: 30, // Reduced overlap proportionally
+    chunkSize: 500, // Reduced from 500 for faster embedding
+    chunkOverlap: 100, // Reduced overlap proportionally
     separators: ['\n\n', '\n', '. ', ' ', ''] // Better splitting points
   });
   

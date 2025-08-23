@@ -2,7 +2,7 @@ import { querySimilar } from "@/lib/chroma";
 import { google } from "@ai-sdk/google";
 import { streamText } from "ai";
 
-const MODEL_NAME = "gemini-2.0-flash-exp";
+const MODEL_NAME = "gemini-2.0-flash";
 
 export async function POST(req: Request) {
   try {
@@ -27,7 +27,7 @@ Question: ${question}
 
 Instructions:
 - Answer based on the provided context
-- If the context doesn't contain relevant information, say so clearly
+- If the context doesn't contain relevant information, say so clearly that PDF does not include information
 - Be accurate and helpful
 - Keep your response focused and relevant
 

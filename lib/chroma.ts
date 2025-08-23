@@ -247,7 +247,7 @@ export async function querySimilar(question: string) {
 
   const res = await col.query({
     queryEmbeddings: [qv],
-    nResults: 5,
+    nResults: 10,
   });
 
   return res.documents?.[0]?.join("\n\n") ?? "No relevant content found.";
